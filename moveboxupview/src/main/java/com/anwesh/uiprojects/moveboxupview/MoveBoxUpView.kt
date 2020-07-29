@@ -14,13 +14,14 @@ import android.graphics.RectF
 import android.content.Context
 
 val nodes : Int = 5
-val scGap : Float = 0.02f
+val parts : Int = 4
+val scGap : Float = 0.02f / parts
 val sizeFactor : Float = 10f
 val foreColor : Int = Color.parseColor("#4CAF50")
 val backColor : Int = Color.parseColor("#BDBDBD")
 val strokeFactor : Float = 90f
 val delay : Long = 20
-val parts : Int = 3
+
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -30,13 +31,14 @@ fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 fun Canvas.drawMoveUpBox(scale : Float, w : Float, h : Float, paint : Paint) {
     val size : Float = Math.min(w, h) / sizeFactor
     val sf : Float = scale.sinify()
-    val sf1 : Float = sf.divideScale(2, parts)
+    val sf1 : Float = sf.divideScale(3, parts)
+    val sf0 : Float = sf.divideScale(0, parts)
     save()
     translate(0f, (h - size) * (1f - sf1))
-    drawRect(RectF(0f, 0f, size, size), paint)
+    drawRect(RectF(0f, size * (1 - sf0), size, size), paint)
     restore()
     for (j in 0..1) {
-        val sfj : Float = sf.divideScale(j, 2)
+        val sfj : Float = sf.divideScale((j + 1), parts)
         drawLine(size * j, 0f, size * j, (h - size) * (sfj - sf1), paint)
     }
 }
@@ -125,7 +127,7 @@ class MoveBoxUpView(ctx : Context) : View(ctx) {
         private var prev : MUBNode? = null
 
         init {
-
+            addNeighbor()
         }
 
         fun addNeighbor() {
