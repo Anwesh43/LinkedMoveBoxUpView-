@@ -205,4 +205,13 @@ class MoveBoxUpView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : MoveBoxUpView {
+            val view : MoveBoxUpView = MoveBoxUpView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
