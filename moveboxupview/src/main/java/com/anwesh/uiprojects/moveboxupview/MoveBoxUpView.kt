@@ -180,4 +180,27 @@ class MoveBoxUpView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : MoveBoxUpView) {
+
+        private val animator : Animator = Animator(view)
+        private val mub : MoveBoxUp = MoveBoxUp(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun draw(canvas : Canvas){
+            canvas.drawColor(backColor)
+            mub.draw(canvas, paint)
+            animator.animate {
+                mub.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            mub.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
